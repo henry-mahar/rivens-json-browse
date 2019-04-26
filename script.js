@@ -98,7 +98,9 @@
                     vm.failed = true
                 }).finally(() => {
                     vm.loading = false
-                })
+					var input = document.body.getElementsByClassName("input-filter form-control ng-pristine ng-valid ng-empty")[1]
+					input.setAttribute("autofocus", "")
+				})
             }
 
             function customFilter (data, filterValues) {
