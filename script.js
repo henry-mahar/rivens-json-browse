@@ -20,7 +20,7 @@
             ]
             vm.selectedPlatform = 'PC'
 
-            vm.mondayList = getMondayList(new Date(Date.UTC(2019,2,25)))
+            vm.mondayList = getMondayList(new Date('2019-03-25'))
             vm.selectedMonday = vm.mondayList[0]
 
             vm.showTotalCompare = true
@@ -33,21 +33,17 @@
 
             // =====
 
-            getRivens(vm.selectedPlatform, vm.selectedMonday.value)
+            getRivens(vm.selectedPlatform, vm.selectedMonday)
 
             function getMondayList (firstMonday) {
-				const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
                 const currentDay = new Date()
                 const mondayList = []
-				let curMonday = firstMonday
+                let lastMonday = new Date(firstMonday)
+
                 do {
-                    mondayList.push({
-						value: curMonday.getTime(),
-						label: monthNames[curMonday.getUTCMonth()] + " " + curMonday.getUTCDate() + ", " + curMonday.getUTCFullYear()
-					})
-                    curMonday.setDate(curMonday.getDate() + 7)
-                } while (curMonday < currentDay)
+                    mondayList.push(new Date(lastMonday))
+                    lastMonday.setDate(lastMonday.getDate() + 7)
+                } while (lastMonday < currentDay)
 
                 mondayList.reverse()
                 return mondayList
@@ -55,8 +51,9 @@
 
             function getRivens (platform, monday) {
                 let url = 'TOTAL_PC'
+
                 if (monday !== 'all') {
-                    const mondayFormatted = $filter('date')(monday, 'yy-MM-dd', 'UTC')
+                    const mondayFormatted = $filter('date')(monday, 'yy-MM-dd')
                     url = `Riven_data_${platform}_${mondayFormatted}`
                 }
 
@@ -100,7 +97,7 @@
                     vm.loading = false
 					var input = document.body.getElementsByClassName("input-filter form-control ng-pristine ng-valid ng-empty")[1]
 					input.setAttribute("autofocus", "")
-				})
+                })
             }
 
             function customFilter (data, filterValues) {
